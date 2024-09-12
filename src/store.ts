@@ -35,13 +35,13 @@ const reducer = (state = InitialState, action: Action): State => {
     case "increment":
       return {
         ...state,
-        counter: state.counter++,
+        counter: state.counter + 1,
       };
 
     case "decrement":
       return {
         ...state,
-        counter: state.counter--,
+        counter: state.counter - 1,
       };
 
     case "incrementAmount":
