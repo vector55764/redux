@@ -1,6 +1,7 @@
 import { useEffect, useReducer } from "react";
 import "./App.scss";
 import {
+  CounterId,
   DecrementAction,
   DecrementAmountAction,
   IncrementAction,
@@ -9,6 +10,18 @@ import {
 } from "./store";
 
 function App() {
+  return (
+    <>
+      <div style={{ display: "flex", flexDirection: "column", columnGap: "10px" }}>
+        <Counter counterId="first"/>
+        <Counter counterId="second"/>
+        <Counter counterId="third"/>
+      </div>
+    </>
+  );
+}
+
+export function Counter({ counterId }: { counterId: CounterId }) {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
@@ -20,43 +33,49 @@ function App() {
   }, []);
 
   return (
-    <>
-      <div style={{ display: "flex", columnGap: "10px" }}>
-        counter {store.getState().counter}
-        <button
-          onClick={() =>
-            store.dispatch({ type: "increment" } satisfies IncrementAction)
-          }
-        >
-          Increment 1
-        </button>
-        <button
-          onClick={() =>
-            store.dispatch({ type: "decrement" } satisfies DecrementAction)
-          }
-        >
-          Decrement 1
-        </button>
-        <button
-          onClick={() =>
-            store.dispatch({
-              type: "incrementAmount",
-            } satisfies IncrementAmountAction)
-          }
-        >
-          Increment 3
-        </button>
-        <button
-          onClick={() =>
-            store.dispatch({
-              type: "decrementAmount",
-            } satisfies DecrementAmountAction)
-          }
-        >
-          Decrement 3
-        </button>
-      </div>
-    </>
+    <div>
+      counter {store.getState().counters[counterId]?.counter}
+      <button
+        onClick={() =>
+          store.dispatch({
+            type: "increment",
+            payload: { counterId },
+          } satisfies IncrementAction)
+        }
+      >
+        Increment 1
+      </button>
+      <button
+        onClick={() =>
+          store.dispatch({
+            type: "decrement",
+            payload: { counterId },
+          } satisfies DecrementAction)
+        }
+      >
+        Decrement 1
+      </button>
+      <button
+        onClick={() =>
+          store.dispatch({
+            type: "incrementAmount",
+            payload: { counterId },
+          } satisfies IncrementAmountAction)
+        }
+      >
+        Increment 3
+      </button>
+      <button
+        onClick={() =>
+          store.dispatch({
+            type: "decrementAmount",
+            payload: { counterId },
+          } satisfies DecrementAmountAction)
+        }
+      >
+        Decrement 3
+      </button>
+    </div>
   );
 }
 
