@@ -7,8 +7,10 @@ import {
   DecrementAmountAction,
   IncrementAction,
   IncrementAmountAction,
-  store,
+  selectCounter,
+  UseAppSlector,
 } from "./store";
+import { useDispatch } from "react-redux";
 
 function App() {
   return (
@@ -24,36 +26,37 @@ function App() {
   );
 }
 
-const selectCounter = (state: AppState, counterId: CounterId) =>
-  state.counters[counterId];
-
 export function Counter({ counterId }: { counterId: CounterId }) {
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  const dispatch = useDispatch();
+  const counterState = UseAppSlector((state) =>
+    selectCounter(state, counterId)
+  );
+  // const [, forceUpdate] = useReducer((x) => x + 1, 0);
   console.log("render counters", counterId);
 
-  const lastStateRef = useRef<ReturnType<typeof selectCounter>>();
+  // const lastStateRef = useRef<ReturnType<typeof selectCounter>>();
 
-  useEffect(() => {
-    const unsubscribe = store.subscribe(() => {
-      const currentState = selectCounter(store.getState(), counterId);
-      const lastState = lastStateRef.current;
-      if (currentState !== lastState) {
-        forceUpdate();
-      }
+  // useEffect(() => {
+  //   const unsubscribe = store.subscribe(() => {
+  //     const currentState = selectCounter(store.getState(), counterId);
+  //     const lastState = lastStateRef.current;
+  //     if (currentState !== lastState) {
+  //       forceUpdate();
+  //     }
 
-      lastStateRef.current = currentState;
-    });
+  //     lastStateRef.current = currentState;
+  //   });
 
-    return unsubscribe;
-  }, []);
+  //   return unsubscribe;
+  // }, []);
 
-  const counterState = selectCounter(store.getState(), counterId);
+  // const counterState = selectCounter(store.getState(), counterId);
   return (
     <div>
       counter {counterState?.counter}
       <button
         onClick={() =>
-          store.dispatch({
+          dispatch({
             type: "increment",
             payload: { counterId },
           } satisfies IncrementAction)
@@ -63,7 +66,7 @@ export function Counter({ counterId }: { counterId: CounterId }) {
       </button>
       <button
         onClick={() =>
-          store.dispatch({
+          dispatch({
             type: "decrement",
             payload: { counterId },
           } satisfies DecrementAction)
@@ -73,7 +76,7 @@ export function Counter({ counterId }: { counterId: CounterId }) {
       </button>
       <button
         onClick={() =>
-          store.dispatch({
+          dispatch({
             type: "incrementAmount",
             payload: { counterId },
           } satisfies IncrementAmountAction)
@@ -83,7 +86,7 @@ export function Counter({ counterId }: { counterId: CounterId }) {
       </button>
       <button
         onClick={() =>
-          store.dispatch({
+          dispatch({
             type: "decrementAmount",
             payload: { counterId },
           } satisfies DecrementAmountAction)
