@@ -1,26 +1,25 @@
-import { useEffect, useReducer, useRef } from "react";
 import "./App.scss";
 import {
-  AppState,
   CounterId,
   DecrementAction,
   DecrementAmountAction,
   IncrementAction,
   IncrementAmountAction,
   selectCounter,
-  UseAppSlector,
+  UseAppSelector,
 } from "./store";
 import { useDispatch } from "react-redux";
+import { UsersList } from "./UsersList";
 
 function App() {
   return (
     <>
-      <div
-        style={{ display: "flex", flexDirection: "column", columnGap: "10px" }}
-      >
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <Counter counterId="first" />
         <Counter counterId="second" />
         <Counter counterId="third" />
+
+        <UsersList />
       </div>
     </>
   );
@@ -28,7 +27,7 @@ function App() {
 
 export function Counter({ counterId }: { counterId: CounterId }) {
   const dispatch = useDispatch();
-  const counterState = UseAppSlector((state) =>
+  const counterState = UseAppSelector((state) =>
     selectCounter(state, counterId)
   );
   // const [, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -55,6 +54,7 @@ export function Counter({ counterId }: { counterId: CounterId }) {
     <div>
       counter {counterState?.counter}
       <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2"
         onClick={() =>
           dispatch({
             type: "increment",
@@ -65,6 +65,7 @@ export function Counter({ counterId }: { counterId: CounterId }) {
         Increment 1
       </button>
       <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2"
         onClick={() =>
           dispatch({
             type: "decrement",
@@ -75,6 +76,7 @@ export function Counter({ counterId }: { counterId: CounterId }) {
         Decrement 1
       </button>
       <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2"
         onClick={() =>
           dispatch({
             type: "incrementAmount",
@@ -85,6 +87,7 @@ export function Counter({ counterId }: { counterId: CounterId }) {
         Increment 3
       </button>
       <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2"
         onClick={() =>
           dispatch({
             type: "decrementAmount",
